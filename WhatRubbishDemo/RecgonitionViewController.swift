@@ -94,6 +94,9 @@ class RecgonitionViewController: UIViewController {
             return
         }
         
+        imagePickerController.sourceType = .camera
+        imagePickerController.modalPresentationStyle = UIModalPresentationStyle.popover
+        present(imagePickerController, animated: true)
         
     }
 }
