@@ -6,12 +6,14 @@
 //
 
 import UIKit
-
+import CoreML
+import Vision
 class RecgonitionViewController: UIViewController {
     let selectButton = UIButton()
     let takeButton = UIButton()
     let imagePickerController = UIImagePickerController()
     let imageView = UIImageView()
+    let label = UILabel()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -19,6 +21,7 @@ class RecgonitionViewController: UIViewController {
         self.view.backgroundColor = .darkGray
         imagePickerController.delegate = self
         configureButtons()
+        configureLabel()
         configureImageView()
         configureConstaints()
     }
@@ -36,6 +39,12 @@ class RecgonitionViewController: UIViewController {
         self.view.addSubview(takeButton)
     }
     
+    func configureLabel() {
+        self.view.addSubview(label)
+        label.text = "book"
+        label.textAlignment = .center
+    }
+    
     func configureImageView() {
         self.view.addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
@@ -46,30 +55,37 @@ class RecgonitionViewController: UIViewController {
         selectButton.translatesAutoresizingMaskIntoConstraints = false
         takeButton.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
-            selectButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            // selectButton
+            selectButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50),
             selectButton.heightAnchor.constraint(equalToConstant: 75),
             selectButton.imageView!.widthAnchor.constraint(equalToConstant: 50),
             selectButton.imageView!.heightAnchor.constraint(equalToConstant: 50),
             selectButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: -25),
-            
+            // takeButton
             takeButton.topAnchor.constraint(equalTo: selectButton.topAnchor),
             takeButton.heightAnchor.constraint(equalToConstant: 75),
             takeButton.imageView!.widthAnchor.constraint(equalToConstant: 50),
             takeButton.imageView!.heightAnchor.constraint(equalToConstant: 50),
             takeButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: 25),
-            
-            imageView.topAnchor.constraint(equalTo: selectButton.bottomAnchor, constant: 50),
+            //imageView
+            imageView.topAnchor.constraint(equalTo: selectButton.bottomAnchor),
             imageView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            imageView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
+            //textView
+            label.topAnchor.constraint(equalTo: imageView.bottomAnchor),
+            label.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            label.heightAnchor.constraint(equalToConstant: 75),
         ]
         self.view.addConstraints(constraints)
     }
     
     @objc func showSelectImage() {
         imagePickerController.sourceType = .photoLibrary
-        imagePickerController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        imagePickerController.modalPresentationStyle = UIModalPresentationStyle.popover
         present(imagePickerController, animated: true)
     }
     @objc func showTakeImage() {
@@ -95,9 +111,46 @@ class RecgonitionViewController: UIViewController {
         }
         
         imagePickerController.sourceType = .camera
-        imagePickerController.modalPresentationStyle = UIModalPresentationStyle.popover
+        imagePickerController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         present(imagePickerController, animated: true)
         
+    }
+    
+    func didFinishSelecting(_ image: UIImage) {
+        imageView.image = image
+        dismiss(animated: true)
+        guard let ciImage = CIImage(image: image) else {
+            return
+        }
+        getPrediction(ciImage)
+    }
+    
+    func getPrediction(_ image: CIImage) {
+        guard let model = try? VNCoreMLModel(for: MobileNetV2(configuration: MLModelConfiguration()).model) else {
+            return
+        }
+        let request = VNCoreMLRequest(model: model, completionHandler: handleResult)
+        let handler = VNImageRequestHandler(ciImage: image, options: [:])
+        do {
+            try handler.perform([request])
+        }
+        catch {
+            fatalError("\(error)")
+        }
+    }
+    
+    func handleResult(request: VNRequest, error: Error?) {
+        print("handling")
+        guard let results = request.results as? [VNClassificationObservation] else {
+            fatalError("No result has been gotten")
+        }
+        
+        guard let result = results.first else {
+            fatalError("No result has been gotten")
+        }
+        
+        print(result)
+        label.text = "\(result.identifier)"
     }
 }
 
@@ -106,8 +159,7 @@ extension RecgonitionViewController: UIImagePickerControllerDelegate {
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return
         }
-        imageView.image = image
-        dismiss(animated: true)
+        didFinishSelecting(image)
     }
 }
 

@@ -15,6 +15,7 @@
 		3131724C27FEF4770010A66D /* RecgonitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3131724B27FEF4770010A66D /* RecgonitionViewController.swift */; };
 		3131724E27FEF4920010A66D /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3131724D27FEF4920010A66D /* IntroductionViewController.swift */; };
 		3131725027FEF4D60010A66D /* PuzzleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3131724F27FEF4D60010A66D /* PuzzleViewController.swift */; };
+		3131725627FF235E0010A66D /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 3131725527FF235E0010A66D /* MobileNetV2.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		3131724B27FEF4770010A66D /* RecgonitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecgonitionViewController.swift; sourceTree = "<group>"; };
 		3131724D27FEF4920010A66D /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
 		3131724F27FEF4D60010A66D /* PuzzleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleViewController.swift; sourceTree = "<group>"; };
+		3131725527FF235E0010A66D /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				3131724B27FEF4770010A66D /* RecgonitionViewController.swift */,
 				3131724D27FEF4920010A66D /* IntroductionViewController.swift */,
 				3131724F27FEF4D60010A66D /* PuzzleViewController.swift */,
+				3131725527FF235E0010A66D /* MobileNetV2.mlmodel */,
 				3131724027FEF2BA0010A66D /* Assets.xcassets */,
 				3131724527FEF2BA0010A66D /* Info.plist */,
 				3131723D27FEF2B90010A66D /* WhatRubbishDemo.xcdatamodeld */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3131725627FF235E0010A66D /* MobileNetV2.mlmodel in Sources */,
 				3131723F27FEF2B90010A66D /* WhatRubbishDemo.xcdatamodeld in Sources */,
 				3131723927FEF2B90010A66D /* TabBarViewController.swift in Sources */,
 				3131725027FEF4D60010A66D /* PuzzleViewController.swift in Sources */,
