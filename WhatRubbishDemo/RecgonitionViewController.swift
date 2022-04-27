@@ -86,6 +86,7 @@ class RecgonitionViewController: UIViewController {
     @objc func showSelectImage() {
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.modalPresentationStyle = UIModalPresentationStyle.popover
+        imagePickerController.allowsEditing = true
         present(imagePickerController, animated: true)
     }
     @objc func showTakeImage() {
@@ -150,7 +151,7 @@ class RecgonitionViewController: UIViewController {
         }
         
         print(result)
-        label.text = "\(result.identifier)"
+        label.text = "\(result.identifier), \(result.confidence)"
     }
 }
 
